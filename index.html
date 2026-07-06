@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NINIA — Inteligencia global para proteger la infancia en entornos digitales.">
+  <title>NINIA Intelligence</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="public-header">
+      <a class="public-brand" href="#overview" data-page="overview" aria-label="NINIA, inicio">
+        <span class="public-wordmark">NINI<span>A</span><i></i></span>
+        <small>Conocimiento que protege</small>
+      </a>
+      <button class="public-menu" id="menuBtn" aria-label="Abrir menú">☰</button>
+      <nav class="public-nav" id="sidebar" aria-label="Navegación principal">
+        <a class="active" href="#overview" data-page="overview">Inicio</a>
+        <a href="#observatory" data-page="observatory">Observatorio</a>
+        <a href="#researcher" data-page="researcher">Investigar</a>
+        <a href="#library" data-page="library">Biblioteca</a>
+        <a href="#compare" data-page="compare">Comparar</a>
+        <a href="#trends" data-page="trends">Tendencias</a>
+        <a href="#media" data-page="media">Media</a>
+        <a href="#studio" data-page="studio">Studio</a>
+        <a href="#academy" data-page="academy">Academy</a>
+      </nav>
+      <div class="public-actions">
+        <button class="header-search" id="commandBtn" aria-label="Buscar">⌕</button>
+        <button class="login-button">Iniciar sesión</button>
+        <button class="join-button">Únete a NINIA</button>
+      </div>
+    </header>
+    <main class="public-main" id="main"><div id="pageContent" class="page-content" aria-live="polite"></div></main>
+    <footer class="site-footer">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="footer-brand" href="#overview" data-page="overview" aria-label="NINIA, inicio">
+            <span class="public-wordmark">NINI<span>A</span><i></i></span>
+            <small>Conocimiento que protege</small>
+          </a>
+          <p>Convertimos evidencia global en inteligencia para fortalecer la protección de niñas, niños y adolescentes en los entornos digitales.</p>
+          <div class="footer-status"><i></i> Observatorio global operativo 24/7</div>
+        </div>
+        <div class="footer-column"><h2>Plataforma</h2><a href="#observatory" data-page="observatory">Observatorio</a><a href="#researcher" data-page="researcher">Investigador IA</a><a href="#library" data-page="library">Biblioteca</a><a href="#compare" data-page="compare">Comparador</a></div>
+        <div class="footer-column"><h2>Conocimiento</h2><a href="#trends" data-page="trends">Tendencias</a><a href="#media" data-page="media">Media Intelligence</a><a href="#packages" data-page="packages">Knowledge Packages</a><a href="#academy" data-page="academy">NINIA Academy</a></div>
+        <div class="footer-column"><h2>Organización</h2><a href="#about">Acerca de NINIA</a><a href="#methodology">Metodología</a><a href="#partners">Aliados</a><a href="mailto:contacto@ninia.org">Contacto</a></div>
+        <div class="footer-connect"><h2>Mantente informado</h2><p>Recibe evidencia, alertas y análisis directamente en tu correo.</p><form id="footerNewsletter"><input type="email" aria-label="Correo para el boletín" placeholder="correo@organizacion.org" required><button aria-label="Suscribirse">→</button></form><div class="footer-social"><a href="#linkedin" aria-label="LinkedIn">in</a><a href="#x" aria-label="X">𝕏</a><a href="#youtube" aria-label="YouTube">▶</a><a href="#mail" aria-label="Correo">✉</a></div></div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 NINIA. Network for Intelligence on Childhood, Information and AI.</span><nav aria-label="Enlaces legales"><a href="#privacy">Privacidad</a><a href="#terms">Términos</a><a href="#accessibility">Accesibilidad</a><a href="#ethics">Ética de IA</a></nav><div><span>♢ Transparente</span><span>◎ Independiente</span></div></div>
+    </footer>
+  </div>
+
+  <button class="ai-orb" id="aiOrb" aria-label="Abrir asistente NINIA"><span>✦</span><i></i></button>
+
+  <div class="command-palette" id="commandPalette" aria-hidden="true">
+    <div class="command-box" role="dialog" aria-modal="true" aria-label="Búsqueda global">
+      <label><span>⌕</span><input id="globalSearch" placeholder="Buscar en toda la inteligencia de NINIA…" autocomplete="off"><kbd>ESC</kbd></label>
+      <div class="command-hint"><span>Búsquedas sugeridas</span><small>Selecciona para explorar</small></div>
+      <button data-query="Impacto de la IA generativa en adolescentes"><span>✦</span><span><b>Impacto de la IA generativa en adolescentes</b><small>Investigar con NINIA AI</small></span><em>↗</em></button>
+      <button data-query="Regulación de plataformas en América Latina"><span>◉</span><span><b>Regulación de plataformas en América Latina</b><small>Explorar 246 fuentes</small></span><em>↗</em></button>
+      <button data-query="Suecia"><span>◎</span><span><b>Suecia</b><small>Perfil de país · 64 indicadores</small></span><em>↗</em></button>
+      <div class="command-footer"><span><kbd>↑</kbd><kbd>↓</kbd> navegar</span><span><kbd>↵</kbd> seleccionar</span></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
