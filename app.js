@@ -20,8 +20,95 @@ const pages = {
     <section class="grid section-grid"><article class="card map-card"><div class="card-header"><div><h3>Índice de protección digital</h3><p>Selecciona un país para abrir su perfil</p></div><button>Capas ⌄</button></div><div class="map-wrap" style="min-height:360px"><div class="world-map"></div><i class="map-dot d1"></i><i class="map-dot d2"></i><i class="map-dot d3"></i><i class="map-dot d4"></i><i class="map-dot d5"></i><div class="map-legend"><i style="background:#10a37f"></i>70–100 <i style="background:#d99715"></i>40–69 <i style="background:#d94c4c"></i>0–39</div></div></article><article class="card chart-card"><div class="card-header"><div><h3>Evolución del índice</h3><p>Promedio global · 2020—2026</p></div><button>Comparar +</button></div><div class="bar-chart" style="height:330px">${[105,132,146,171,198,228,254].map((v,i)=>`<i class="bar ${i===6?'active':''}" style="height:${v}px" data-label="${2020+i}"></i>`).join('')}</div></article></section>
     <article class="card table-card" style="margin-top:16px"><div class="card-header"><div><h3>Ranking de preparación nacional</h3><p>Indicadores normalizados por disponibilidad de datos</p></div><button>Metodología ↗</button></div><div class="table-toolbar"><input id="countrySearch" placeholder="Buscar país…"><button class="filter-button">Región ⌄</button></div>${countryTable()}</article>`,
   researcher: () => `
-    <section class="page-header"><div><p class="eyebrow">Investigador IA</p><h1>Asistente científico</h1></div><div class="header-actions"><button class="ghost-button" id="exportChat">Exportar conversación ↓</button></div></section>
-    <section class="researcher-layout"><aside class="chat-history"><button id="newChat">＋ Nueva conversación</button><p class="history-label">Recientes</p><div class="history-item active">Impacto de algoritmos de recomendación</div><div class="history-item">Evidencia sobre verificación de edad</div><div class="history-item">Comparativa regulatoria LATAM</div><p class="history-label">Hace 30 días</p><div class="history-item">Bienestar digital y escuelas</div></aside><div class="chat-main"><div class="chat-intro" id="chatIntro"><div class="ai-badge">✦</div><h2>Investiga con toda la evidencia de NINIA</h2><p>Respuestas sintetizadas, verificables y con citas a fuentes primarias. La IA puede equivocarse; revisa siempre la evidencia.</p><div class="suggestions"><button>¿Qué políticas reducen el acoso digital escolar?</button><button>Compara la regulación de edad en UE y LATAM</button><button>Resume la evidencia sobre redes sociales y sueño</button><button>Identifica vacíos de investigación en IA generativa</button></div></div><div class="chat-messages" id="chatMessages"></div><form class="chat-composer" id="chatForm"><input id="chatInput" placeholder="Haz una pregunta de investigación…" autocomplete="off"><button aria-label="Enviar">↑</button></form></div><aside class="source-panel"><h3>Fuentes y contexto</h3><div id="sourceList"><div class="empty-source">Las fuentes citadas y documentos relacionados aparecerán aquí.</div></div></aside></section>`,
+    <section class="page-header researcher-header">
+      <div>
+        <p class="eyebrow">Investigador IA</p>
+        <h1>Workspace de investigación</h1>
+        <p>Organiza proyectos, incorpora evidencia y consulta la inteligencia de NINIA desde un único espacio.</p>
+      </div>
+      <div class="header-actions">
+        <button class="ghost-button" id="exportResearch">Exportar resumen ↓</button>
+        <button class="primary-button" id="newResearchBtn">＋ Nueva investigación</button>
+      </div>
+    </section>
+
+    <section class="research-workspace">
+      <div class="research-kpis">
+        <article><span>Proyectos activos</span><strong id="researchCount">0</strong><small>En este dispositivo</small></article>
+        <article><span>Evidencias cargadas</span><strong id="evidenceCount">0</strong><small>Estado preliminar</small></article>
+        <article><span>En validación</span><strong id="validationCount">0</strong><small>Revisión humana requerida</small></article>
+        <article><span>Conocimiento aprobado</span><strong>0</strong><small>Conexión con NINIA-AI pendiente</small></article>
+      </div>
+
+      <div class="research-main-grid">
+        <article class="workspace-card-panel">
+          <div class="workspace-title-row">
+            <div><p class="eyebrow">CAP-001</p><h2>Mis investigaciones</h2></div>
+            <button class="text-button" id="newResearchInline">＋ Crear proyecto</button>
+          </div>
+          <div id="researchProjects" class="research-projects"></div>
+        </article>
+
+        <aside class="workspace-side-panel">
+          <article class="workspace-card-panel compact">
+            <p class="eyebrow">Evidencia</p>
+            <h2>Incorporar documento</h2>
+            <p>PDF, DOCX o TXT. Todo documento entra como <b>PROPUESTO</b> hasta validación humana.</p>
+            <input id="evidenceFile" type="file" accept=".pdf,.docx,.txt" hidden>
+            <button class="primary-button full" id="evidenceUploadBtn">Subir evidencia</button>
+            <div id="evidenceStatus" class="evidence-status">Aún no hay documentos cargados.</div>
+          </article>
+
+          <article class="workspace-card-panel compact">
+            <p class="eyebrow">Estado del sistema</p>
+            <div class="system-check"><span class="ok-dot"></span><div><b>Frontend operativo</b><small>Desplegado en Vercel</small></div></div>
+            <div class="system-check"><span class="warn-dot"></span><div><b>NINIA-AI pendiente de conexión</b><small>La interfaz está preparada para la API</small></div></div>
+            <div class="system-check"><span class="warn-dot"></span><div><b>Knowledge Base local</b><small>Se activará en la siguiente integración</small></div></div>
+          </article>
+        </aside>
+      </div>
+
+      <article class="workspace-card-panel ai-research-panel">
+        <div class="workspace-title-row">
+          <div><p class="eyebrow">Consulta inteligente</p><h2>Investiga con NINIA</h2></div>
+          <button class="ghost-button" id="newChat">Nueva conversación</button>
+        </div>
+        <div class="researcher-layout embedded">
+          <div class="chat-main">
+            <div class="chat-intro" id="chatIntro">
+              <div class="ai-badge">✦</div>
+              <h2>Consulta la evidencia de NINIA</h2>
+              <p>Las respuestas deberán basarse en conocimiento validado y citar fuentes primarias.</p>
+              <div class="suggestions">
+                <button>¿Qué políticas reducen el acoso digital escolar?</button>
+                <button>Compara la regulación de edad en UE y LATAM</button>
+                <button>Resume la evidencia sobre redes sociales y sueño</button>
+                <button>Identifica vacíos de investigación en IA generativa</button>
+              </div>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <form class="chat-composer" id="chatForm">
+              <input id="chatInput" placeholder="Haz una pregunta de investigación…" autocomplete="off">
+              <button aria-label="Enviar">↑</button>
+            </form>
+          </div>
+          <aside class="source-panel">
+            <h3>Fuentes y contexto</h3>
+            <div id="sourceList"><div class="empty-source">Las fuentes citadas aparecerán aquí.</div></div>
+          </aside>
+        </div>
+      </article>
+    </section>
+
+    <dialog id="researchDialog" class="research-dialog">
+      <form method="dialog" id="researchForm">
+        <div class="dialog-head"><div><p class="eyebrow">Nueva investigación</p><h2>Crear proyecto</h2></div><button value="cancel" aria-label="Cerrar">×</button></div>
+        <label>Título<input name="title" required maxlength="120" placeholder="Ej. IA generativa y adolescencia"></label>
+        <label>Pregunta de investigación<textarea name="question" required rows="4" placeholder="¿Qué quieres investigar?"></textarea></label>
+        <label>Área temática<select name="topic"><option>IA generativa</option><option>Privacidad infantil</option><option>Desinformación</option><option>Plataformas digitales</option><option>AMI</option><option>Otro</option></select></label>
+        <div class="dialog-actions"><button value="cancel" class="ghost-button">Cancelar</button><button value="default" class="primary-button" id="saveResearch">Crear investigación</button></div>
+      </form>
+    </dialog>`,
   library: () => `
     <section class="page-header"><div><p class="eyebrow">Biblioteca de evidencia</p><h1>12.486 documentos indexados</h1><p>Investigación académica, políticas públicas y datos globales, clasificados por IA y revisados con criterios transparentes.</p><div class="library-stats"><span><b>87%</b> texto completo</span><span><b>64</b> idiomas</span><span><b>1.240</b> organizaciones</span></div></div><button class="primary-button">＋ Añadir fuente</button></section>
     <div class="filter-strip"><button class="filter-button active">Toda la evidencia</button><button class="filter-button">País ⌄</button><button class="filter-button">Tema ⌄</button><button class="filter-button">Tipo de estudio ⌄</button><button class="filter-button">Evidencia ⌄</button><button class="filter-button">Fecha ⌄</button></div>
@@ -45,7 +132,90 @@ function paperCards(){return [['Revisión sistemática','Safety by design for ch
 
 const content=document.getElementById('pageContent');
 function navigate(page){page=pages[page]?page:'overview';content.innerHTML=pages[page]();document.querySelectorAll('.public-nav [data-page]').forEach(el=>el.classList.toggle('active',el.dataset.page===page));document.getElementById('sidebar').classList.remove('open');window.location.hash=page;window.scrollTo(0,0);bindPageEvents(page)}
-function bindPageEvents(page){content.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>navigate(b.dataset.page));content.querySelectorAll('.filter-button').forEach(b=>b.onclick=()=>{b.classList.toggle('active');showToast(b.classList.contains('active')?'Filtro aplicado':'Filtro eliminado')});content.querySelectorAll('.save-button').forEach(b=>b.onclick=()=>{b.textContent=b.textContent==='♡'?'♥':'♡';showToast(b.textContent==='♥'?'Guardado en favoritos':'Eliminado de favoritos')});if(page==='overview'){document.getElementById('heroSearch').onsubmit=e=>{e.preventDefault();const q=e.target.querySelector('input').value.trim();navigate('researcher');if(q){document.getElementById('chatInput').value=q;sendChat(q)}};document.getElementById('newsletterForm').onsubmit=e=>{e.preventDefault();showToast('Gracias. Revisa tu correo para confirmar la suscripción');e.target.reset()}}if(page==='researcher')bindChat();if(page==='library'){document.getElementById('paperSearch').oninput=e=>filterCards(e.target.value)}if(page==='observatory'){document.getElementById('countrySearch').oninput=e=>{document.querySelectorAll('tbody tr').forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(e.target.value.toLowerCase()))}}}
+function bindPageEvents(page){content.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>navigate(b.dataset.page));content.querySelectorAll('.filter-button').forEach(b=>b.onclick=()=>{b.classList.toggle('active');showToast(b.classList.contains('active')?'Filtro aplicado':'Filtro eliminado')});content.querySelectorAll('.save-button').forEach(b=>b.onclick=()=>{b.textContent=b.textContent==='♡'?'♥':'♡';showToast(b.textContent==='♥'?'Guardado en favoritos':'Eliminado de favoritos')});if(page==='overview'){document.getElementById('heroSearch').onsubmit=e=>{e.preventDefault();const q=e.target.querySelector('input').value.trim();navigate('researcher');if(q){document.getElementById('chatInput').value=q;sendChat(q)}};document.getElementById('newsletterForm').onsubmit=e=>{e.preventDefault();showToast('Gracias. Revisa tu correo para confirmar la suscripción');e.target.reset()}}if(page==='researcher'){bindResearcherWorkspace();bindChat();}if(page==='library'){document.getElementById('paperSearch').oninput=e=>filterCards(e.target.value)}if(page==='observatory'){document.getElementById('countrySearch').oninput=e=>{document.querySelectorAll('tbody tr').forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(e.target.value.toLowerCase()))}}}
+
+const RESEARCH_STORAGE_KEY='ninia_research_projects_v1';
+const EVIDENCE_STORAGE_KEY='ninia_evidence_count_v1';
+
+function getResearchProjects(){
+  try{return JSON.parse(localStorage.getItem(RESEARCH_STORAGE_KEY)||'[]')}catch{return []}
+}
+function saveResearchProjects(items){
+  localStorage.setItem(RESEARCH_STORAGE_KEY,JSON.stringify(items));
+}
+function bindResearcherWorkspace(){
+  const dialog=document.getElementById('researchDialog');
+  const form=document.getElementById('researchForm');
+  const openDialog=()=>dialog&&dialog.showModal();
+  document.getElementById('newResearchBtn').onclick=openDialog;
+  document.getElementById('newResearchInline').onclick=openDialog;
+  document.getElementById('exportResearch').onclick=()=>showToast('Resumen de investigaciones preparado');
+  form.onsubmit=e=>{
+    e.preventDefault();
+    const data=new FormData(form);
+    const projects=getResearchProjects();
+    projects.unshift({
+      id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),
+      title:data.get('title').trim(),
+      question:data.get('question').trim(),
+      topic:data.get('topic'),
+      status:'Borrador',
+      createdAt:new Date().toISOString()
+    });
+    saveResearchProjects(projects);
+    form.reset();
+    dialog.close();
+    renderResearchProjects();
+    showToast('Investigación creada');
+  };
+  document.getElementById('evidenceUploadBtn').onclick=()=>document.getElementById('evidenceFile').click();
+  document.getElementById('evidenceFile').onchange=e=>{
+    const file=e.target.files[0];
+    if(!file)return;
+    const allowed=['pdf','docx','txt'];
+    const ext=file.name.split('.').pop().toLowerCase();
+    if(!allowed.includes(ext)){showToast('Formato no permitido');e.target.value='';return}
+    const count=Number(localStorage.getItem(EVIDENCE_STORAGE_KEY)||0)+1;
+    localStorage.setItem(EVIDENCE_STORAGE_KEY,String(count));
+    document.getElementById('evidenceStatus').innerHTML=`<b>${escapeHtml(file.name)}</b><small>Estado: PROPUESTO · pendiente de conexión con NINIA-AI</small>`;
+    updateResearchKpis();
+    showToast('Evidencia registrada localmente');
+  };
+  renderResearchProjects();
+  updateResearchKpis();
+}
+function renderResearchProjects(){
+  const target=document.getElementById('researchProjects');
+  if(!target)return;
+  const projects=getResearchProjects();
+  if(!projects.length){
+    target.innerHTML=`<div class="research-empty"><span>◫</span><h3>Aún no tienes investigaciones</h3><p>Crea tu primer proyecto para organizar preguntas, evidencia y resultados.</p><button class="primary-button" id="emptyCreate">Crear primera investigación</button></div>`;
+    document.getElementById('emptyCreate').onclick=()=>document.getElementById('researchDialog').showModal();
+    return;
+  }
+  target.innerHTML=projects.map(item=>`
+    <article class="research-project-card">
+      <div class="research-project-icon">⌁</div>
+      <div>
+        <div class="project-meta"><span>${escapeHtml(item.topic)}</span><span>${new Date(item.createdAt).toLocaleDateString('es')}</span></div>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p>${escapeHtml(item.question)}</p>
+      </div>
+      <div class="project-status"><span>${escapeHtml(item.status)}</span><button data-open-project="${item.id}">Abrir →</button></div>
+    </article>`).join('');
+  target.querySelectorAll('[data-open-project]').forEach(btn=>btn.onclick=()=>showToast('Vista de proyecto preparada para la siguiente versión'));
+}
+function updateResearchKpis(){
+  const projects=getResearchProjects();
+  const evidence=Number(localStorage.getItem(EVIDENCE_STORAGE_KEY)||0);
+  const count=document.getElementById('researchCount');
+  const ecount=document.getElementById('evidenceCount');
+  const vcount=document.getElementById('validationCount');
+  if(count)count.textContent=projects.length;
+  if(ecount)ecount.textContent=evidence;
+  if(vcount)vcount.textContent=evidence;
+}
+
 function bindChat(){document.getElementById('chatForm').onsubmit=e=>{e.preventDefault();sendChat(document.getElementById('chatInput').value)};document.querySelectorAll('.suggestions button').forEach(b=>b.onclick=()=>sendChat(b.textContent));document.getElementById('newChat').onclick=()=>navigate('researcher');document.getElementById('exportChat').onclick=()=>showToast('Conversación preparada para exportar')}
 function sendChat(q){if(!q.trim())return;const intro=document.getElementById('chatIntro'),msgs=document.getElementById('chatMessages'),input=document.getElementById('chatInput');intro.style.display='none';msgs.style.display='block';msgs.innerHTML+=`<div class="chat-message user">${escapeHtml(q)}</div><div class="chat-message ai"><strong>✦ NINIA está analizando 12.486 fuentes…</strong><span class="typing">Buscando evidencia relevante, evaluando calidad y contrastando resultados.</span></div>`;input.value='';setTimeout(()=>{const last=msgs.querySelector('.chat-message.ai:last-child');last.innerHTML=`<strong>✦ Síntesis de evidencia</strong>La evidencia disponible indica que las intervenciones más efectivas combinan diseño seguro por defecto, alfabetización digital y mecanismos de reporte accesibles. Los efectos son mayores cuando existe coordinación entre escuelas, familias y plataformas <span class="citation">1</span>.<br><br>La calidad general de la evidencia es <b>moderada-alta</b>: hay consistencia entre revisiones sistemáticas, aunque persisten vacíos en países de ingresos medios y bajos <span class="citation">2</span> <span class="citation">3</span>.`;document.getElementById('sourceList').innerHTML=['UNICEF Innocenti · Evidence review 2026','OECD · Children & Young People Online','Nature Human Behaviour · Longitudinal study'].map((x,i)=>`<div class="source-card"><b>${i+1}. ${x}</b><small>${i===0?'Revisión sistemática':'Investigación primaria'} · Evidencia alta</small></div>`).join('');msgs.scrollTop=msgs.scrollHeight},900)}
 function filterCards(q){document.querySelectorAll('.paper-card').forEach(c=>c.hidden=!c.textContent.toLowerCase().includes(q.toLowerCase()))}
