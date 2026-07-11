@@ -76,3 +76,15 @@
 .dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:4px}
 @media(max-width:1000px){.research-kpis{grid-template-columns:repeat(2,1fr)}.research-main-grid{grid-template-columns:1fr}.workspace-side-panel{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.workspace-card-panel.compact{margin:0}.researcher-layout.embedded{grid-template-columns:1fr}.researcher-layout.embedded .source-panel{border-left:0;border-top:1px solid var(--line)}}
 @media(max-width:650px){.research-kpis,.workspace-side-panel{grid-template-columns:1fr}.research-project-card{grid-template-columns:42px 1fr}.project-status{grid-column:2;align-items:flex-start}.workspace-title-row{align-items:flex-start;flex-direction:column}}
+
+
+/* NINIA v1.0.2 — Evidence Admission */
+.admission-flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:14px 0 10px}
+.admission-flow span{font-size:.68rem;font-weight:800;letter-spacing:.04em;padding:6px 8px;border-radius:999px;background:#eef4f3;color:#174f4d}
+.admission-flow i{font-style:normal;color:#7b8e8c}
+.admission-alert{padding:12px 14px;border-radius:12px;background:#fff6df;border:1px solid #ead39a;color:#6f5312;margin-bottom:16px;line-height:1.45}
+.form-grid-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.evidence-dialog{max-width:760px}
+.consent-check{display:flex!important;flex-direction:row!important;align-items:flex-start;gap:10px}
+.consent-check input{width:auto!important;margin-top:4px}
+@media(max-width:720px){.form-grid-two{grid-template-columns:1fr}}

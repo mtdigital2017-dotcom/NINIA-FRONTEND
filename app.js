@@ -51,12 +51,14 @@ const pages = {
 
         <aside class="workspace-side-panel">
           <article class="workspace-card-panel compact">
-            <p class="eyebrow">Evidencia</p>
-            <h2>Incorporar documento</h2>
-            <p>PDF, DOCX o TXT. Todo documento entra como <b>PROPUESTO</b> hasta validación humana.</p>
-            <input id="evidenceFile" type="file" accept=".pdf,.docx,.txt" hidden>
-            <button class="primary-button full" id="evidenceUploadBtn">Subir evidencia</button>
-            <div id="evidenceStatus" class="evidence-status">Aún no hay documentos cargados.</div>
+            <p class="eyebrow">Admisión de evidencia</p>
+            <h2>Solicitar incorporación</h2>
+            <p>Ningún documento entra directamente al conocimiento. Primero pasa por cuarentena, validación automática y revisión humana.</p>
+            <button class="primary-button full" id="evidenceAdmissionBtn">Iniciar solicitud</button>
+            <div class="admission-flow">
+              <span>CUARENTENA</span><i>→</i><span>EN VALIDACIÓN</span><i>→</i><span>APROBADO / RECHAZADO</span>
+            </div>
+            <div id="evidenceStatus" class="evidence-status">Aún no hay solicitudes registradas.</div>
           </article>
 
           <article class="workspace-card-panel compact">
@@ -100,6 +102,35 @@ const pages = {
       </article>
     </section>
 
+    <dialog id="evidenceAdmissionDialog" class="research-dialog evidence-dialog">
+      <form method="dialog" id="evidenceAdmissionForm">
+        <div class="dialog-head">
+          <div><p class="eyebrow">Filtro de admisión</p><h2>Solicitar incorporación de evidencia</h2></div>
+          <button value="cancel" aria-label="Cerrar">×</button>
+        </div>
+        <div class="admission-alert">La solicitud quedará en <b>CUARENTENA</b>. No alimentará la Biblioteca, el RAG ni el Observatorio hasta aprobación humana.</div>
+        <label>Documento<input name="file" id="evidenceFile" type="file" accept=".pdf,.docx,.txt" required></label>
+        <div class="form-grid-two">
+          <label>Título<input name="title" required maxlength="180" placeholder="Título completo del documento"></label>
+          <label>Año<input name="year" type="number" min="1900" max="2100" required></label>
+        </div>
+        <div class="form-grid-two">
+          <label>Autor o entidad<input name="author" required placeholder="Autor, universidad u organización"></label>
+          <label>Tipo de documento<select name="documentType" required>
+            <option value="">Selecciona</option><option>Artículo científico</option><option>Informe institucional</option><option>Tesis</option><option>Normativa</option><option>Dataset</option><option>Otro</option>
+          </select></label>
+        </div>
+        <label>Fuente o revista<input name="source" required placeholder="Revista, repositorio, organismo o editorial"></label>
+        <label>URL o DOI<input name="url" type="url" placeholder="https://..."></label>
+        <label>Relación con NINIA<textarea name="relation" required rows="3" placeholder="Explica por qué esta evidencia es relevante para la protección de NNA en entornos digitales"></textarea></label>
+        <label class="consent-check"><input name="declaration" type="checkbox" required> Declaro que la información es auténtica, trazable y no ha sido manipulada.</label>
+        <div class="dialog-actions">
+          <button value="cancel" class="ghost-button">Cancelar</button>
+          <button value="default" class="primary-button" id="submitEvidenceAdmission">Enviar a cuarentena</button>
+        </div>
+      </form>
+    </dialog>
+
     <dialog id="researchDialog" class="research-dialog">
       <form method="dialog" id="researchForm">
         <div class="dialog-head"><div><p class="eyebrow">Nueva investigación</p><h2>Crear proyecto</h2></div><button value="cancel" aria-label="Cerrar">×</button></div>
@@ -135,7 +166,7 @@ function navigate(page){page=pages[page]?page:'overview';content.innerHTML=pages
 function bindPageEvents(page){content.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>navigate(b.dataset.page));content.querySelectorAll('.filter-button').forEach(b=>b.onclick=()=>{b.classList.toggle('active');showToast(b.classList.contains('active')?'Filtro aplicado':'Filtro eliminado')});content.querySelectorAll('.save-button').forEach(b=>b.onclick=()=>{b.textContent=b.textContent==='♡'?'♥':'♡';showToast(b.textContent==='♥'?'Guardado en favoritos':'Eliminado de favoritos')});if(page==='overview'){document.getElementById('heroSearch').onsubmit=e=>{e.preventDefault();const q=e.target.querySelector('input').value.trim();navigate('researcher');if(q){document.getElementById('chatInput').value=q;sendChat(q)}};document.getElementById('newsletterForm').onsubmit=e=>{e.preventDefault();showToast('Gracias. Revisa tu correo para confirmar la suscripción');e.target.reset()}}if(page==='researcher'){bindResearcherWorkspace();bindChat();}if(page==='library'){document.getElementById('paperSearch').oninput=e=>filterCards(e.target.value)}if(page==='observatory'){document.getElementById('countrySearch').oninput=e=>{document.querySelectorAll('tbody tr').forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(e.target.value.toLowerCase()))}}}
 
 const RESEARCH_STORAGE_KEY='ninia_research_projects_v1';
-const EVIDENCE_STORAGE_KEY='ninia_evidence_count_v1';
+const EVIDENCE_STORAGE_KEY='ninia_evidence_requests_v2';
 
 function getResearchProjects(){
   try{return JSON.parse(localStorage.getItem(RESEARCH_STORAGE_KEY)||'[]')}catch{return []}
@@ -168,20 +199,43 @@ function bindResearcherWorkspace(){
     renderResearchProjects();
     showToast('Investigación creada');
   };
-  document.getElementById('evidenceUploadBtn').onclick=()=>document.getElementById('evidenceFile').click();
-  document.getElementById('evidenceFile').onchange=e=>{
-    const file=e.target.files[0];
-    if(!file)return;
+  const admissionDialog=document.getElementById('evidenceAdmissionDialog');
+  const admissionForm=document.getElementById('evidenceAdmissionForm');
+  document.getElementById('evidenceAdmissionBtn').onclick=()=>admissionDialog.showModal();
+  admissionForm.onsubmit=e=>{
+    e.preventDefault();
+    const data=new FormData(admissionForm);
+    const file=data.get('file');
+    if(!file||!file.name){showToast('Selecciona un documento');return}
     const allowed=['pdf','docx','txt'];
     const ext=file.name.split('.').pop().toLowerCase();
-    if(!allowed.includes(ext)){showToast('Formato no permitido');e.target.value='';return}
-    const count=Number(localStorage.getItem(EVIDENCE_STORAGE_KEY)||0)+1;
-    localStorage.setItem(EVIDENCE_STORAGE_KEY,String(count));
-    document.getElementById('evidenceStatus').innerHTML=`<b>${escapeHtml(file.name)}</b><small>Estado: PROPUESTO · pendiente de conexión con NINIA-AI</small>`;
+    if(!allowed.includes(ext)){showToast('Formato no permitido');return}
+    const requests=getEvidenceRequests();
+    const duplicate=requests.some(item=>item.fileName===file.name&&item.fileSize===file.size);
+    if(duplicate){showToast('Posible duplicado detectado');return}
+    requests.unshift({
+      id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),
+      fileName:file.name,
+      fileSize:file.size,
+      title:String(data.get('title')||'').trim(),
+      year:String(data.get('year')||'').trim(),
+      author:String(data.get('author')||'').trim(),
+      documentType:String(data.get('documentType')||'').trim(),
+      source:String(data.get('source')||'').trim(),
+      url:String(data.get('url')||'').trim(),
+      relation:String(data.get('relation')||'').trim(),
+      status:'CUARENTENA',
+      submittedAt:new Date().toISOString()
+    });
+    saveEvidenceRequests(requests);
+    admissionForm.reset();
+    admissionDialog.close();
+    renderEvidenceStatus();
     updateResearchKpis();
-    showToast('Evidencia registrada localmente');
+    showToast('Solicitud enviada a cuarentena');
   };
   renderResearchProjects();
+  renderEvidenceStatus();
   updateResearchKpis();
 }
 function renderResearchProjects(){
@@ -205,15 +259,35 @@ function renderResearchProjects(){
     </article>`).join('');
   target.querySelectorAll('[data-open-project]').forEach(btn=>btn.onclick=()=>showToast('Vista de proyecto preparada para la siguiente versión'));
 }
+function getEvidenceRequests(){
+  try{return JSON.parse(localStorage.getItem(EVIDENCE_STORAGE_KEY)||'[]')}catch{return []}
+}
+function saveEvidenceRequests(items){
+  localStorage.setItem(EVIDENCE_STORAGE_KEY,JSON.stringify(items));
+}
+function renderEvidenceStatus(){
+  const target=document.getElementById('evidenceStatus');
+  if(!target)return;
+  const requests=getEvidenceRequests();
+  if(!requests.length){
+    target.textContent='Aún no hay solicitudes registradas.';
+    return;
+  }
+  const item=requests[0];
+  target.innerHTML=`<b>${escapeHtml(item.title)}</b><small>${escapeHtml(item.author)} · Estado: ${escapeHtml(item.status)}</small>`;
+}
+
 function updateResearchKpis(){
   const projects=getResearchProjects();
-  const evidence=Number(localStorage.getItem(EVIDENCE_STORAGE_KEY)||0);
+  const requests=getEvidenceRequests();
+  const evidence=requests.length;
+  const validation=requests.filter(item=>item.status==='CUARENTENA'||item.status==='EN VALIDACIÓN').length;
   const count=document.getElementById('researchCount');
   const ecount=document.getElementById('evidenceCount');
   const vcount=document.getElementById('validationCount');
   if(count)count.textContent=projects.length;
   if(ecount)ecount.textContent=evidence;
-  if(vcount)vcount.textContent=evidence;
+  if(vcount)vcount.textContent=validation;
 }
 
 function bindChat(){document.getElementById('chatForm').onsubmit=e=>{e.preventDefault();sendChat(document.getElementById('chatInput').value)};document.querySelectorAll('.suggestions button').forEach(b=>b.onclick=()=>sendChat(b.textContent));document.getElementById('newChat').onclick=()=>navigate('researcher');document.getElementById('exportChat').onclick=()=>showToast('Conversación preparada para exportar')}

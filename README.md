@@ -1,22 +1,14 @@
-# NINIA Intelligence — UX/UI prototype
+# NINIA Frontend v1.0.2
 
-Prototipo web responsive de alta fidelidad para la plataforma global NINIA.
+## Incremento
+Evidence Admission para Investigador IA.
 
-## Ejecutar
+## Visible en Vercel
+- Botón `Solicitar incorporación`.
+- Formulario obligatorio de trazabilidad.
+- Estado inicial `CUARENTENA`.
+- Detección básica de duplicados por nombre y tamaño.
+- Contadores actualizados en el Workspace.
 
-Abre `index.html` directamente o sirve la carpeta con un servidor estático:
-
-```bash
-python3 -m http.server 4173
-```
-
-Luego visita `http://localhost:4173`.
-
-## Alcance
-
-- Design system mediante tokens CSS y componentes reutilizables.
-- Home editorial inspirado en portales internacionales de evidencia, con fotografía original generada para NINIA.
-- Overview ejecutivo, Observatorio, Investigador IA y Biblioteca.
-- Vistas de producto para Comparador, Tendencias, Media Intelligence, Knowledge Packages, AI Studio y Academy.
-- Navegación SPA, búsqueda global, filtros, favoritos, tabla, mapa, chat con fuentes y estados responsive.
-- Accesibilidad base: landmarks, labels, foco nativo, contraste y `prefers-reduced-motion`.
+## Regla
+Ningún documento alimenta Biblioteca, RAG u Observatorio sin validación humana.
