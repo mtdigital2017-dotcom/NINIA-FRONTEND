@@ -88,3 +88,92 @@
 .consent-check{display:flex!important;flex-direction:row!important;align-items:flex-start;gap:10px}
 .consent-check input{width:auto!important;margin-top:4px}
 @media(max-width:720px){.form-grid-two{grid-template-columns:1fr}}
+
+
+/* NINIA Knowledge API Adapter */
+.knowledge-api-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.knowledge-card-head,
+.knowledge-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.knowledge-status,
+.document-type,
+.knowledge-topic {
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.document-type,
+.knowledge-topic {
+  background: #eef3f7;
+  color: #29445b;
+}
+
+.knowledge-status.status-aprobado {
+  background: #dff6eb;
+  color: #116149;
+}
+
+.knowledge-status.status-propuesto {
+  background: #fff2cc;
+  color: #73510d;
+}
+
+.knowledge-status.status-en_validacion {
+  background: #e5efff;
+  color: #2459a9;
+}
+
+.knowledge-status.status-rechazado {
+  background: #fee4e2;
+  color: #b42318;
+}
+
+.knowledge-meta {
+  display: grid;
+  gap: 7px;
+  color: #4a5f70;
+  font-size: 13px;
+}
+
+.knowledge-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.knowledge-topic.muted {
+  opacity: .68;
+}
+
+.knowledge-card-footer {
+  border-top: 1px solid #e5ebef;
+  padding-top: 12px;
+  font-size: 12px;
+}
+
+.knowledge-card-footer code {
+  max-width: 48%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.library-loading,
+.library-error,
+.library-empty {
+  grid-column: 1 / -1;
+  padding: 28px;
+  text-align: center;
+}
