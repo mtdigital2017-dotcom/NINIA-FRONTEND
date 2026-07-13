@@ -177,3 +177,16 @@
   padding: 28px;
   text-align: center;
 }
+
+
+/* Sprint 2.4 — Backend ↔ Frontend */
+.ninia-api-profile-fields { display:grid; gap:14px; }
+.ninia-private-request {
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(15,61,69,.12);
+}
+.ninia-private-request:last-child { border-bottom:0; }
+.ninia-private-request small { color:#587176; }
