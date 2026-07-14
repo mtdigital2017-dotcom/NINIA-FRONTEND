@@ -7,6 +7,7 @@
   <title>NINIA Intelligence</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="sprint33.css">
+  <link rel="stylesheet" href="sprint34.css">
 </head>
 <body>
   <div class="site-shell">
@@ -18,14 +19,14 @@
       <button class="public-menu" id="menuBtn" aria-label="Abrir menú">☰</button>
       <nav class="public-nav" id="sidebar" aria-label="Navegación principal">
         <a class="active" href="#overview" data-page="overview">Inicio</a>
-        <a href="#observatory" data-page="observatory">Observatorio</a><a href="#operations" data-page="operations">Operaciones</a>
+        <a href="#observatory" data-page="observatory">Observatorio Mundial</a><a href="#operations" data-page="operations">Operaciones</a>
         <a href="#researcher" data-page="researcher">Investigar</a>
         <a href="#library" data-page="library">Biblioteca</a>
         <a href="#compare" data-page="compare">Comparar</a>
         <a href="#trends" data-page="trends">Tendencias</a>
-        <a href="#media" data-page="media">Media</a>
+        <a href="#media" data-page="media">Media Center</a>
         <a href="#studio" data-page="studio">Studio</a>
-        <a href="#academy" data-page="academy">Academy</a>
+        <a href="#academy" data-page="academy">Centro AMI</a>
       </nav>
       <div class="public-actions">
         <button class="header-search" id="commandBtn" aria-label="Buscar">⌕</button>
@@ -44,7 +45,7 @@
           <p>Convertimos evidencia global en inteligencia para fortalecer la protección de niñas, niños y adolescentes en los entornos digitales.</p>
           <div class="footer-status"><i></i> Observatorio global operativo 24/7</div>
         </div>
-        <div class="footer-column"><h2>Plataforma</h2><a href="#observatory" data-page="observatory">Observatorio</a><a href="#researcher" data-page="researcher">Investigador IA</a><a href="#library" data-page="library">Biblioteca</a><a href="#compare" data-page="compare">Comparador</a></div>
+        <div class="footer-column"><h2>Plataforma</h2><a href="#observatory" data-page="observatory">Observatorio Mundial</a><a href="#researcher" data-page="researcher">Investigador IA</a><a href="#library" data-page="library">Biblioteca</a><a href="#compare" data-page="compare">Comparador</a></div>
         <div class="footer-column"><h2>Conocimiento</h2><a href="#trends" data-page="trends">Tendencias</a><a href="#media" data-page="media">Media Intelligence</a><a href="#packages" data-page="packages">Knowledge Packages</a><a href="#academy" data-page="academy">NINIA Academy</a></div>
         <div class="footer-column"><h2>Organización</h2><a href="#about">Acerca de NINIA</a><a href="#methodology">Metodología</a><a href="#partners">Aliados</a><a href="mailto:contacto@ninia.org">Contacto</a></div>
         <div class="footer-connect"><h2>Mantente informado</h2><p>Recibe evidencia, alertas y análisis directamente en tu correo.</p><form id="footerNewsletter"><input type="email" aria-label="Correo para el boletín" placeholder="correo@organizacion.org" required><button aria-label="Suscribirse">→</button></form><div class="footer-social"><a href="#linkedin" aria-label="LinkedIn">in</a><a href="#x" aria-label="X">𝕏</a><a href="#youtube" aria-label="YouTube">▶</a><a href="#mail" aria-label="Correo">✉</a></div></div>
@@ -68,9 +69,11 @@
 
   <div class="toast" id="toast" role="status"></div>
   <script src="config.js"></script>
+  <script src="ninia-api-settings.js"></script>
   <script src="app.js"></script>
   <script src="ninia-knowledge-adapter.js"></script>
   <script src="ninia-api-bridge.js"></script>
   <script src="ninia-operations-media.js"></script>
+  <script src="ninia-global-observatory.js"></script>
 </body>
 </html>
