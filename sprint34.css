@@ -225,121 +225,21 @@
   }
 }
 
-.ninia-api-button {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  z-index: 9990;
-  border: 0;
-  border-radius: 999px;
-  padding: 11px 15px;
-  background: #0b355f;
-  color: #fff;
-  font-weight: 800;
-  box-shadow: 0 10px 30px rgba(9, 41, 70, .24);
-  cursor: pointer;
-}
-.ninia-api-button.needs-config {
-  background: #b54632;
-  animation: ninia-api-pulse 1.8s infinite;
-}
-@keyframes ninia-api-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(181, 70, 50, .35); }
-  50% { box-shadow: 0 0 0 10px rgba(181, 70, 50, 0); }
-}
-.ninia-api-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: none;
-  place-items: center;
-  padding: 18px;
-  background: rgba(6, 23, 40, .68);
-  backdrop-filter: blur(7px);
-}
-.ninia-api-modal[aria-hidden="false"] {
-  display: grid;
-}
-.ninia-api-dialog {
-  position: relative;
-  width: min(520px, 100%);
-  border-radius: 22px;
-  background: #fff;
-  padding: 28px;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, .28);
-}
-.ninia-api-close {
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  border: 0;
-  background: transparent;
-  font-size: 1.7rem;
-  cursor: pointer;
-}
-.ninia-api-kicker {
-  margin: 0 0 7px;
-  color: #168374;
-  font-size: .74rem;
-  font-weight: 900;
-  letter-spacing: .08em;
-}
-.ninia-api-dialog h2 {
-  margin: 0 0 8px;
-  color: #0a2947;
-}
-.ninia-api-dialog p {
-  color: #5a6f7d;
-  line-height: 1.5;
-}
-.ninia-api-dialog code {
-  word-break: break-all;
-}
-.ninia-api-label {
-  display: grid;
-  gap: 7px;
-  margin: 20px 0;
-  color: #294c61;
-  font-weight: 800;
-}
-.ninia-api-label input {
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid #cbd9e0;
-  border-radius: 12px;
-  padding: 13px;
-  font: inherit;
-}
-.ninia-api-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-.ninia-api-actions button {
-  border-radius: 12px;
-  padding: 11px 14px;
-  font-weight: 800;
-  cursor: pointer;
-}
-.ninia-api-secondary {
-  border: 1px solid #b9cbd4;
-  background: #fff;
-  color: #24485e;
-}
-.ninia-api-primary {
-  border: 1px solid #0b725f;
-  background: #0b725f;
-  color: #fff;
-}
-.ninia-api-result {
-  min-height: 22px;
-  margin-top: 14px;
-  color: #526a79;
-  font-weight: 700;
-}
-.ninia-api-result.ok {
-  color: #08735f;
-}
-.ninia-api-result.error {
-  color: #ad2f3e;
-}
+
+.ninia-api-button{position:fixed;right:18px;bottom:18px;z-index:9990;border:0;border-radius:999px;padding:11px 15px;background:#0b355f;color:#fff;font-weight:800;cursor:pointer}
+.ninia-api-button.needs-config{background:#b54632}
+.ninia-api-modal{position:fixed;inset:0;z-index:10000;display:none;place-items:center;padding:18px;background:rgba(6,23,40,.68)}
+.ninia-api-modal[aria-hidden="false"]{display:grid}
+.ninia-api-dialog{position:relative;width:min(520px,100%);border-radius:22px;background:#fff;padding:28px}
+.ninia-api-close{position:absolute;top:12px;right:14px;border:0;background:transparent;font-size:1.7rem;cursor:pointer}
+.ninia-api-kicker{color:#168374;font-size:.74rem;font-weight:900}
+.ninia-api-label{display:grid;gap:7px;margin:20px 0;color:#294c61;font-weight:800}
+.ninia-api-label input{width:100%;box-sizing:border-box;border:1px solid #cbd9e0;border-radius:12px;padding:13px}
+.ninia-api-actions{display:flex;justify-content:flex-end;gap:10px}
+.ninia-api-actions button{border-radius:12px;padding:11px 14px;font-weight:800;cursor:pointer}
+.ninia-api-secondary{border:1px solid #b9cbd4;background:#fff;color:#24485e}
+.ninia-api-primary{border:1px solid #0b725f;background:#0b725f;color:#fff}
+.ninia-api-result{min-height:22px;margin-top:14px;color:#526a79;font-weight:700}
+.ninia-api-result.ok{color:#08735f}
+.ninia-api-result.error{color:#ad2f3e}
+
