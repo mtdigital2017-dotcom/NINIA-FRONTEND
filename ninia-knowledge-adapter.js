@@ -198,7 +198,7 @@
       );
       url.searchParams.set('status', status);
 
-      const response = await fetch(url.toString(), {
+      const response = await readyFetch(url.toString(), {
         headers: { Accept: 'application/json' },
       });
 

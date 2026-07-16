@@ -1,6 +1,11 @@
 (() => {
   "use strict";
 
+  async function readyFetch(url, options) {
+    if (window.NINIA_API_READY) await window.NINIA_API_READY;
+    return fetch(url, options);
+  }
+
   const API_BASE_URL =
     window.NINIA_API_BASE_URL ||
     localStorage.getItem("NINIA_API_BASE_URL") ||
@@ -104,7 +109,7 @@
     resultBox.classList.remove("visible");
 
     try {
-      const response = await fetch(`${API_BASE_URL}/documents/process`, {
+      const response = await readyFetch(`${API_BASE_URL}/documents/process`, {
         method:"POST",
         body:new FormData(form)
       });

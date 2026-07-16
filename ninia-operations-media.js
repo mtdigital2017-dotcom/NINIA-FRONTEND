@@ -1,6 +1,11 @@
 (() => {
   "use strict";
 
+  async function readyFetch(url, options) {
+    if (window.NINIA_API_READY) await window.NINIA_API_READY;
+    return fetch(url, options);
+  }
+
   const TRUST_LEVEL_A = [
     "UNICEF", "WHO", "OMS", "UNESCO", "OECD", "OCDE",
     "UNITED NATIONS", "NACIONES UNIDAS", "EUROPEAN COMMISSION",
@@ -30,7 +35,7 @@
     .replaceAll("'", "&#039;");
 
   async function request(path, options = {}) {
-    const response = await fetch(`${apiBase()}${path}`, {
+    const response = await readyFetch(`${apiBase()}${path}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

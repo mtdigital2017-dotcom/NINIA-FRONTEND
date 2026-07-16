@@ -29,6 +29,7 @@
   }
 
   async function request(path, options = {}) {
+    if (window.NINIA_API_READY) await window.NINIA_API_READY;
     const response = await fetch(`${apiBase()}${path}`, {
       headers: {
         Accept: "application/json",
