@@ -1,11 +1,6 @@
 (() => {
   "use strict";
 
-  async function readyFetch(url, options) {
-    if (window.NINIA_API_READY) await window.NINIA_API_READY;
-    return fetch(url, options);
-  }
-
   const TRUST_LEVEL_A = [
     "UNICEF", "WHO", "OMS", "UNESCO", "OECD", "OCDE",
     "UNITED NATIONS", "NACIONES UNIDAS", "EUROPEAN COMMISSION",
@@ -35,7 +30,7 @@
     .replaceAll("'", "&#039;");
 
   async function request(path, options = {}) {
-    const response = await readyFetch(`${apiBase()}${path}`, {
+    const response = await fetch(`${apiBase()}${path}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -305,16 +300,10 @@
     }
   }
 
-  const observer = new MutationObserver(() => {
-    if (["operations", "media"].includes(currentPage())) {
-      activatePage();
-    }
-  });
-
+  // app.js se carga antes de este módulo y renderiza la página
+  // durante hashchange/DOMContentLoaded. No se observa #pageContent aquí:
+  // renderOperations() y renderMedia() modifican ese mismo nodo y una
+  // observación recursiva produciría un ciclo infinito de renderizado.
   window.addEventListener("hashchange", activatePage);
-  document.addEventListener("DOMContentLoaded", () => {
-    const root = document.getElementById("pageContent");
-    if (root) observer.observe(root, { childList: true });
-    activatePage();
-  });
+  document.addEventListener("DOMContentLoaded", activatePage);
 })();
