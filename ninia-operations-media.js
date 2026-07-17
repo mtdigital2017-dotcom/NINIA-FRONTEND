@@ -304,6 +304,8 @@
   // durante hashchange/DOMContentLoaded. No se observa #pageContent aquí:
   // renderOperations() y renderMedia() modifican ese mismo nodo y una
   // observación recursiva produciría un ciclo infinito de renderizado.
-  window.addEventListener("hashchange", activatePage);
+  window.addEventListener("ninia:page-ready", event => {
+    if (["operations", "media"].includes(event.detail?.page)) activatePage();
+  });
   document.addEventListener("DOMContentLoaded", activatePage);
 })();

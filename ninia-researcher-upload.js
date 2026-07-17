@@ -148,8 +148,8 @@
     container().appendChild(createPanel());
   }
 
-  addEventListener("hashchange", () => setTimeout(mount, 50));
-  new MutationObserver(() => { if (isResearcher()) mount(); })
-    .observe(document.body, {childList:true, subtree:true});
-  setTimeout(mount, 100);
+  window.addEventListener("ninia:page-ready", event => {
+    if (event.detail?.page === "researcher") mount();
+  });
+  document.addEventListener("DOMContentLoaded", mount);
 })();

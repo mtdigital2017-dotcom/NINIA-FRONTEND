@@ -252,13 +252,9 @@
     loadKnowledge('approved');
   }
 
-  const observer = new MutationObserver(bindLibrary);
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
+  window.addEventListener('ninia:page-ready', event => {
+    if (event.detail?.page === 'library') bindLibrary();
   });
-
-  window.addEventListener('hashchange', bindLibrary);
   document.addEventListener('DOMContentLoaded', bindLibrary);
 
   window.NINIA_KNOWLEDGE_ADAPTER = {

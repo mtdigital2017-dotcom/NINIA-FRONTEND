@@ -244,10 +244,9 @@
     loadPrivateRequests();
   }
 
-  const observer = new MutationObserver(bindResearcher);
-  observer.observe(document.body, { childList: true, subtree: true });
-
-  addEventListener("hashchange", () => setTimeout(bindResearcher, 50));
+  window.addEventListener("ninia:page-ready", event => {
+    if (event.detail?.page === "researcher") bindResearcher();
+  });
   document.addEventListener("DOMContentLoaded", bindResearcher);
 
   window.NINIA_API_BRIDGE = {

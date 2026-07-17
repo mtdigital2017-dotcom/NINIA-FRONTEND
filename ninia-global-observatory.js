@@ -370,26 +370,8 @@
     state.timer = setInterval(load, 10000);
   }
 
-  window.addEventListener("hashchange", activate);
-  document.addEventListener("DOMContentLoaded", activate);
-
-  const observer = new MutationObserver(() => {
-    const page = (location.hash || "#overview").slice(1);
-    if (
-      page === "observatory" &&
-      !document.querySelector(
-        ".global-observatory-header"
-      )
-    ) {
-      activate();
-    }
+  window.addEventListener("ninia:page-ready", event => {
+    if (event.detail?.page === "observatory") activate();
   });
-
-  observer.observe(
-    document.documentElement,
-    {
-      childList: true,
-      subtree: true,
-    }
-  );
+  document.addEventListener("DOMContentLoaded", activate);
 })();
