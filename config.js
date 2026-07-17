@@ -4,6 +4,7 @@
   const STORAGE_KEY = "NINIA_API_BASE_URL";
   const LOCAL_API = "http://localhost:8000";
   const PRODUCTION_CANDIDATES = [
+    "https://ninia-ai.onrender.com",
     "https://ninia-ai.vercel.app"
   ];
   const isLocal = ["localhost", "127.0.0.1"].includes(window.location.hostname);
