@@ -2,64 +2,100 @@
   "use strict";
 
   const STORAGE_KEY = "NINIA_API_BASE_URL";
-  const LOCAL_API = "http://localhost:8000";
+  const params = new URLSearchParams(window.location.search);
+  const queryValue = String(params.get("api") || "").trim();
+  const storedValue = String(localStorage.getItem(STORAGE_KEY) || "").trim();
+  const isLocal = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+
   const PRODUCTION_CANDIDATES = [
-    "https://ninia-ai.onrender.com",
+    "https://ninia-ai-mtdigital2017.onrender.com",
     "https://ninia-ai.vercel.app"
   ];
-  const isLocal = ["localhost", "127.0.0.1"].includes(window.location.hostname);
 
   function normalize(value) {
     const clean = String(value || "").trim().replace(/\/+$/, "");
     if (!clean) return "";
     try {
       const url = new URL(clean);
-      return ["http:", "https:"].includes(url.protocol)
-        ? url.toString().replace(/\/+$/, "")
-        : "";
+      if (!["http:", "https:"].includes(url.protocol)) return "";
+      return url.toString().replace(/\/+$/, "");
     } catch {
       return "";
     }
   }
 
   async function isHealthy(baseUrl) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 8000);
     try {
       const response = await fetch(`${baseUrl}/health`, {
-        headers: { Accept: "application/json" },
-        signal: controller.signal
+        method: "GET",
+        cache: "no-store",
       });
       return response.ok;
     } catch {
       return false;
-    } finally {
-      clearTimeout(timer);
     }
   }
 
-  const stored = normalize(localStorage.getItem(STORAGE_KEY));
-  window.NINIA_API_BASE_URL = isLocal ? LOCAL_API : (stored || PRODUCTION_CANDIDATES[0]);
-  window.NINIA_API_READY = (async () => {
-    const candidates = isLocal
-      ? [LOCAL_API]
-      : [...new Set([stored, ...PRODUCTION_CANDIDATES].filter(Boolean))];
+  async function resolveApiBaseUrl() {
+    const explicit = normalize(queryValue || storedValue);
+    if (explicit && await isHealthy(explicit)) {
+      localStorage.setItem(STORAGE_KEY, explicit);
+      return explicit;
+    }
 
-    for (const candidate of candidates) {
-      const normalized = normalize(candidate);
-      if (normalized && await isHealthy(normalized)) {
-        window.NINIA_API_BASE_URL = normalized;
-        localStorage.setItem(STORAGE_KEY, normalized);
-        return normalized;
+    if (isLocal) {
+      const local = "http://localhost:8000";
+      if (await isHealthy(local)) return local;
+    }
+
+    for (const candidate of PRODUCTION_CANDIDATES) {
+      if (await isHealthy(candidate)) {
+        localStorage.setItem(STORAGE_KEY, candidate);
+        return candidate;
       }
     }
 
-    throw new Error("No fue posible conectar con el backend público de NINIA.");
-  })();
+    return normalize(explicit || (isLocal ? "http://localhost:8000" : PRODUCTION_CANDIDATES[0]));
+  }
+
+  window.NINIA_API_BASE_URL = normalize(
+    queryValue ||
+    storedValue ||
+    (isLocal ? "http://localhost:8000" : PRODUCTION_CANDIDATES[0])
+  );
+
+  window.NINIA_API_READY = resolveApiBaseUrl().then((resolved) => {
+    window.NINIA_API_BASE_URL = resolved;
+    return resolved;
+  });
 
   window.NINIA_API_CONFIG = {
     storageKey: STORAGE_KEY,
-    get: () => normalize(window.NINIA_API_BASE_URL),
-    ready: () => window.NINIA_API_READY
+    candidates: [...PRODUCTION_CANDIDATES],
+    get() {
+      return normalize(
+        window.NINIA_API_BASE_URL ||
+        localStorage.getItem(STORAGE_KEY) ||
+        ""
+      );
+    },
+    async resolve() {
+      return window.NINIA_API_READY;
+    },
+    set(value) {
+      const normalized = normalize(value);
+      if (!normalized) throw new Error("La URL debe comenzar con http:// o https://");
+      localStorage.setItem(STORAGE_KEY, normalized);
+      window.NINIA_API_BASE_URL = normalized;
+      window.NINIA_API_READY = Promise.resolve(normalized);
+      return normalized;
+    },
+    clear() {
+      localStorage.removeItem(STORAGE_KEY);
+      window.NINIA_API_BASE_URL = isLocal
+        ? "http://localhost:8000"
+        : PRODUCTION_CANDIDATES[0];
+      window.NINIA_API_READY = resolveApiBaseUrl();
+    }
   };
 })();
