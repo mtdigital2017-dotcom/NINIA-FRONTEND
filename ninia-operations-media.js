@@ -267,7 +267,7 @@
           source_ids: [],
           max_documents_per_source: 1,
           max_total_documents: 3,
-          train_if_ready: true,
+          train_if_ready: false,
         }),
       });
       state.status = result;
