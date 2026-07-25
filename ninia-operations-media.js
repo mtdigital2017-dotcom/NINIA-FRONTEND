@@ -65,7 +65,7 @@
     const counts = corpus.counts || corpus;
     const training = s.training || {};
     const acquisition = s.acquisition || {};
-    const model = s.model || s.latest_model || {};
+    const model = s.official_model || s.model || s.latest_model || {};
     const health = s.status || "DESCONOCIDO";
 
     return `
@@ -83,9 +83,9 @@
 
       <section class="operations-status-strip">
         <article><span>Estado</span><strong class="status-live">● ${esc(health)}</strong><small>Backend: ${esc(apiBase())}</small></article>
-        <article><span>Propuestos</span><strong>${number(counts.proposed)}</strong><small>Requieren revisión</small></article>
-        <article><span>Aprobados</span><strong>${number(counts.approved)}</strong><small>Conocimiento oficial</small></article>
-        <article><span>Corpus score</span><strong>${number(corpus.corpus_score?.value ?? corpus.corpus_score).toFixed(2)}</strong><small>No es accuracy</small></article>
+        <article><span>Propuestos</span><strong>${number(counts.proposed)}</strong><small>Corte auditado: requieren revisión</small></article>
+        <article><span>Aprobados</span><strong>${number(counts.approved)}</strong><small>Corte auditado: conocimiento oficial</small></article>
+        <article><span>Corpus score</span><strong>${number(corpus.corpus_score?.value ?? corpus.corpus_score).toFixed(2)}</strong><small>Último corte auditado; no es accuracy</small></article>
       </section>
 
       <section class="operations-grid">
